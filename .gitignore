@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Environment
+.env
+
+# ChromaDB (auto-generated, can be re-ingested)
+chroma_db/
+
+# SQLite conversation history
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Android build outputs (when android-app is added)
+android-app/app/build/
+android-app/.gradle/
+*.apk

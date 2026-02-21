@@ -1,0 +1,397 @@
+
+INPUT: Otp maangta hena
+OUTPUT: Ha to bata dena otp
+
+INPUT: Krro
+OUTPUT: E mail to bata
+
+INPUT: Nya password agr maange toh
+OUTPUT: Otp ?
+
+INPUT: 3a
+OUTPUT: Flipkart, amazon se lia
+
+INPUT: Offline
+OUTPUT: Kitne ka pada ?
+
+INPUT: 24k
+OUTPUT: Sahi h
+
+INPUT: 300-400ke
+OUTPUT: Charger ?
+
+INPUT: Bank
+OUTPUT: Aare ..
+
+INPUT: Iski inglis pddh kr mera sir chkra gya ab aapki baari
+OUTPUT: Ye to meri id h
+
+INPUT: Aap inglis pddho iski
+OUTPUT: Oh mai goad , baat a inglis , aai am fully totaali soaked ,  Geeret keap eat app 👍
+
+INPUT: Hnm
+OUTPUT: TOMMOROW  Details will be shared and the campaign will start.  So if any of your friends from your college or different are yet to join the group. Share the group invite link with them and make  them join by today.  Link - https://chat.whatsapp.com/EEl79Oj7JrkIlRM7twAh0U?mode=ems_copy_t   Regards, Team Internsveda
+
+INPUT: Ye kaha se nikaal re ho
+OUTPUT: Puposa ne bheji
+
+INPUT: 😂
+OUTPUT: जन्मदिनस्य कोटिशः शुभकामनाः
+
+INPUT: Meri 21 se term break h
+OUTPUT: Agli saal
+
+INPUT: M se konsa?
+OUTPUT: 2-3 tak
+
+INPUT: Toh m vi chluga
+OUTPUT: Pata ni , chat gpt to free h India waalo ke liae 1 saal tak
+
+INPUT: Dekho
+OUTPUT: Hoga koi rule unka shaayad , new user ke liae
+
+INPUT: 28*m
+OUTPUT: Terko kab jaana h
+
+INPUT: Jbb aap ko jaana h
+OUTPUT: Kal to me saam ko free houga 6 baje
+
+INPUT: Ab movie ke liye site vtaao
+OUTPUT: Terko pata to h ,me to abhi bhi net mirror use karta hu
+
+INPUT: Chlra nhi h
+OUTPUT: Mere to chalta h
+
+INPUT: Brave pe?
+OUTPUT: Maine us din ke baad close hi ni kia uss tab ko
+
+INPUT: Aaaj?
+OUTPUT: 10 min ruk
+
+INPUT: Jaipur jaara huu
+OUTPUT: Ni khel re kya ?
+
+INPUT: 5 trade m 3500 ka profit bnna liya
+OUTPUT: Or aaj ka kya profit raha
+
+INPUT: Bss paisa nhi h kmaane ke liye
+OUTPUT: -25000 hajaar jaate h na , to ache ache log exit kar lete h trade
+
+INPUT: Lo bhejo toh shii prr
+OUTPUT: Tere paas koi pehle ki edit Kari hui video h kya koi
+
+INPUT: Yupp
+OUTPUT: Raw footage utha le google se video editing ke liye
+
+INPUT: Kha liya kya khana
+OUTPUT: Aaja
+
+INPUT: Kab jayega jaipur
+OUTPUT: 26
+
+INPUT: Dekh isko ek bar
+OUTPUT: Crypto nahi karta bhai me abhi
+
+INPUT: Ek bar uska record de bhai
+OUTPUT: Record du ?
+
+INPUT: Kha pe h mitar
+OUTPUT: jaipur <This message was edited>
+
+INPUT: Hotstar ka premium le rakha hu abhi to
+OUTPUT: Arre us se bhi jyada khatarnaak h
+
+INPUT: Ya link nhi chal rhi
+OUTPUT: Mere to chal raha h
+
+INPUT: Netflix ka premium h tere pe ?
+OUTPUT: Ispe sab mil jaaega jo Netfix , Amazon prime pe ho
+
+INPUT: Liye
+OUTPUT: Bhejta hu
+
+INPUT: Got ke mil jayenge kya
+OUTPUT: Sab mil jaata h yaha
+
+INPUT: App se kru ya site
+OUTPUT: Kahi se bhi kar le
+
+INPUT: Okk
+OUTPUT: matlab ?
+
+INPUT: Ye app install nhi ho rha
+OUTPUT: playstore pe jjake , profile pe jaake , play protect pe jaake , uski settings pe jaake , usse band kad kar de
+
+INPUT: Abhi bhi whi bta rha h
+OUTPUT: fir to ni pata bhai , shayad ye tere device ke liye optimised ni h
+
+INPUT: Kya bhai dark web wale sir
+OUTPUT: Bhai vo to pen drive hu corrupt ho gai
+
+INPUT: Pta bhi nhi chalta msg ignore Kiya h dekh nhi
+OUTPUT: arre bohot kaam ki cheej h ye
+
+INPUT: ???
+OUTPUT: Dear All, Choose Departmental Elective using below form :  https://forms.gle/bEyKPwobeAGkQn917  Complete this task by tomorrow EOD (Dated as 24/12/24).  Thanks
+
+INPUT: ssc tech entry
+OUTPUT: ?
+
+INPUT: Os-24
+OUTPUT: kya
+
+INPUT: Fir sirf schedule change hoga
+OUTPUT: Nai , 19 se classes h
+
+INPUT: Accha
+OUTPUT: Lakshay ne kaha
+
+INPUT: Shadi kab khtm hogi tumhari
+OUTPUT: 24 ya 25
+
+INPUT: Ok
+OUTPUT: Dear 2nd/3rd year mentors   Nptel registrations are going to be closed on 26th January 2025. Please ask your mentees to register fast if they want to opt or change any course(OE/Back/Detain).Rules & regulations are already discussed with you.  Some of the students have still chosen 8 week courses or the courses which belong to CSE domain.Plz check that too.  Also, remind the students that 1st assignment for every nptel course has been released.They have to duly submit it.
+
+INPUT: Cod
+OUTPUT: ?
+
+INPUT: *Exclusive Study Abroad Session with SI-UK in collaboration with IAESTE LC JECRC*  We are pleased to invite you to an insightful session on higher education opportunities abroad, featuring *Mr. Madhusudhan Joshi*, a distinguished expert in Career Architecture and Study Abroad Consultancy with *23 years of experience in education*, career guidance, and consulting.  📅 Date: 4th February 2025 ⏰ Time: 10:30 AM - 12:00 PM 📍 Venue: VIB Seminar Hall Ground floor ( Engg Blk)  This session will provide valuable insights into:  • Top universities and courses in abroad • Scholarships and financial aid opportunities • Application and visa guidance • Career prospects  We encourage all students considering higher education abroad to attend this session and gain expert insights.  We look forward to your participation.
+OUTPUT: [PHONE]
+
+INPUT: .
+OUTPUT: # File System and Data Management Concepts  ## File Organization Methods  ### 1. Heap File (Unordered File) - **Definition**: The simplest file organization where records are inserted at the end of the file without any ordering. - **Characteristics**: - Records are stored in the order they are inserted - No sorting or hashing is applied - New records are added at the end of the file - **Operations**: - Insertion: Very fast (O(1)) - Search: Linear search required (O(n)) - Deletion: Mark records as deleted or periodically reorganize - **Use Cases**: When data is frequently inserted but rarely searched, or when quick insertion is critical  ### 2. Sequential File - **Definition**: Records are stored in sequential order based on a search key. - **Characteristics**: - Records are ordered by a key field - Allows for efficient processing of all records in order - **Operations**: - Search: Binary search possible (O(log n)) - Insertion: Requires reorganization to maintain order - **Types**: - Purely sequential: Always maintained in order - Indexed sequential: Uses an index to locate records quickly - **Use Cases**: Batch processing applications, report generation  ### 3. Hash File - **Definition**: Uses a hash function to compute the address of a record directly. - **Characteristics**: - Direct access to records via hash key - Fixed hash function maps keys to specific locations - **Operations**: - Insertion/Search/Deletion: O(1) average case - Collision handling required (chaining or open addressing) - **Variations**: - Static hashing: Fixed number of buckets - Dynamic hashing: Number of buckets can grow - **Use Cases**: When exact-match queries are common (dictionaries, symbol tables)  ### 4. Clustered File - **Definition**: Stores related records from different relations together physically. - **Characteristics**: - Related records (e.g., orders and order items) stored near each other - Improves join performance - **Types**: - Single-table clustering: One relation clustered on an attribute - Multi-table clustering: Multiple relations clustered together - **Use Cases**: Frequently joined tables, parent-child relationships  ## File Operations  1. **Create/Delete**: Making new files or removing existing ones 2. **Open/Close**: Preparing files for access or closing them after use 3. **Read/Write**: Basic data access operations 4. **Seek**: Positioning within a file 5. **Update**: Modifying existing records 6. **Reorganization**: Restructuring file for better performance 7. **Compaction**: Removing deleted records and free space  ## Indexing  - **Definition**: A data structure that improves the speed of data retrieval operations - **Types**: - Primary index: On ordering key field (unique) - Secondary index: On non-ordering field (may be non-unique) - Dense index: Contains entry for every search key value - Sparse index: Contains entry for only some search key values - **Benefits**: - Faster data retrieval - Can enforce uniqueness constraints - **Costs**: - Additional storage space - Overhead during insert/update/delete operations  ## B-tree  - **Definition**: A self-balancing tree data structure that maintains sorted data - **Characteristics**: - All leaves are at the same level - Each node contains between t-1 and 2t-1 keys (for a B-tree of order t) - Nodes may have many children (between t and 2t) - **Operations**: - Search: O(log n) - Insertion/Deletion: May involve splitting or merging nodes - **Properties**: - Guarantees minimum 50% node utilization - Good for systems with large blocks of data (like disks) - **Use Cases**: File systems, databases where disk access is expensive  ## B+ tree  - **Definition**: A variation of B-tree where all data is stored in the leaf nodes - **Characteristics**: - Internal nodes only contain keys (no data) - Leaf nodes are linked together for sequential access - Higher fanout than B-trees - **Advantages over B-tree**: - More keys per node → shallower trees - Better for range queries (linked leaves) - More stable performance as data grows - **Use Cases**: Most modern database systems (Oracle, MySQL, PostgreSQL)  ## Introduction to Data Mining  - **Definition**: The process of discovering patterns in large datasets - **Key Tasks**: - Classification: Assigning items to categories - Clustering: Grouping similar items - Association rule learning: Discovering relationships - Anomaly detection: Identifying unusual items - **Process**: 1. Data cleaning 2. Data integration 3. Data selection 4. Data transformation 5. Data mining 6. Pattern evaluation 7. Knowledge presentation - **Techniques**: - Decision trees - Neural networks - Genetic algorithms - Statistical methods - **Applications**: Market basket analysis, fraud detection, customer segmentation  ## Data Farming  - **Definition**: The process of using computational methods to extensively explore a model's parameter space - **Characteristics**: - Focuses on generating and analyzing large amounts of data - Used in simulation and modeling - Helps understand complex systems - **Process**: 1. Define parameter space 2. Generate scenarios 3. Execute simulations 4. Analyze results - **Applications**: Military planning, economic forecasting, scientific research  ## Data Warehousing  - **Definition**: A centralized repository of integrated data from multiple sources - **Characteristics**: - Subject-oriented: Organized around major subjects - Integrated: Consistent naming, format, etc. - Time-variant: Contains historical data - Non-volatile: Data is read-only once entered - **Architecture**: - Bottom tier: Data warehouse server - Middle tier: OLAP server - Top tier: Front-end tools - **Components**: - Data sources - ETL (Extract, Transform, Load) process - Metadata - Access tools - **Schemas**: - Star schema: Fact table with dimension tables - Snowflake schema: Normalized dimensions - Fact constellation: Multiple fact tables - **Applications**: Business intelligence, decision support systems, reporting  Each of these concepts plays a crucial role in modern data management systems, from low-level file organization to high-level data analysis techniques. Understanding them provides a comprehensive foundation for working with data storage and retrieval systems.
+
+INPUT: Free ho khabhi toh bata dena bht dino sai pade hai khi jang na lag jaye
+OUTPUT: War league chal rahi h , 1 ghanta h only , 9 ya 10 ya 11 me se kisi ko bhi uda do
+
+INPUT: Kara
+OUTPUT: War attack
+
+INPUT: Ok
+OUTPUT: Arre attack karo dono , 1/2 ghanta bacha h bas
+
+INPUT: Bhar jaa arja hun
+OUTPUT: .
+
+INPUT: Update
+OUTPUT: working
+
+INPUT: Itna bada
+OUTPUT: Leeme show u
+
+INPUT: Poocha ky tune call karke
+OUTPUT: Abhi to nahi
+
+INPUT: Mam call nhi utha rhi hai tu bhi call karle
+OUTPUT: Ruk saam tak batata hu
+
+INPUT: Bhaipost bhi karni hai re yrrr ek
+OUTPUT: To kar de
+
+INPUT: Fee ka toh dekh le
+OUTPUT: Vo to kal
+
+INPUT: Image ke kiye konsa ai hai !?
+OUTPUT: Copilot
+
+INPUT: Han
+OUTPUT: Ha
+
+INPUT: Nhi abhi aya hun ghar mai
+OUTPUT: Abe yaar war me to bina kahe attack kar dia kar
+
+INPUT: Bhai ek dikkat hai. Call kar
+OUTPUT: Abhi kar
+
+INPUT: Aaj toh post bana de
+OUTPUT: Khul hi nahi rahi link
+
+INPUT: Esi site bata jha jaake yeh code likh dun or peeche watermark na aaye
+OUTPUT: Ye to pata nahi
+
+INPUT: Is code ko image mai convert karna hai
+OUTPUT: Arre sidhe image hi generate kara le , code kyo bana raha h
+
+INPUT: Amazon ka
+OUTPUT: Nai
+
+INPUT: Wo toh frazi tha
+OUTPUT: Arre Mai to asli me bhaaga tha par
+
+INPUT: Bhai apni gali mai ky bhav chal rhe hai plot ke tere papa sai pooch kar bata na
+OUTPUT: Pata ni unko
+
+INPUT: .
+OUTPUT: Ye pulinde to samajh hi ni aa re
+
+INPUT: Kyun
+OUTPUT: to bhar de abhi ke abhi
+
+INPUT: Paise hi nhi hai bhai 🙂
+OUTPUT: kal se extra charges h
+
+INPUT: 2000 kha sai laaun
+OUTPUT: or 15 last date h
+
+INPUT: Jaldi bata fir car bhi chalani hai mujhe
+OUTPUT: Kuch ni , yaad dila rah tha , NPTEL ke assignment or fees bhar dena
+
+INPUT: Tu kab bhara tha form 🙂
+OUTPUT: 15 h date
+
+INPUT: Mujhe aapki aeronautics ki date nhi pata thi isliye aapko soochna nhi di mene warna gyan deta ki spelling aati nhi auronotics waalo ko gyan dega
+OUTPUT: Form to maine bhi soft skills ka bhara h , or Japanese seekh Raha hu
+
+INPUT: No
+OUTPUT: Form mam ko hi dia tha na
+
+INPUT: Rajvardhan(Prince) Singh Rathore.vcf (file attached)
+OUTPUT: Class me hu
+
+INPUT: Chal subh baat karte hai soja abhi toh
+OUTPUT: Bhai shreyash tala laga ke chabi clg le aaya
+
+INPUT: Kab free hoga
+OUTPUT: Pg hu , free hu
+
+INPUT: [PHONE]
+OUTPUT: Attack kar
+
+INPUT: Bata bhai inme saj ky lun mai
+OUTPUT: War scenery
+
+INPUT: Ky bolta hai
+OUTPUT: Hope pe nahi lagti ye , keval war me
+
+INPUT: Yeh dekh
+OUTPUT: Ha dekh rakhi h
+
+INPUT: Online dekh na ek baar
+OUTPUT: Nahi
+
+INPUT: Isse bhadiya tih warden or royal champion ki skin hai bc
+OUTPUT: Abe achhi h
+
+INPUT: Bhai paise kha hai 😭😭
+OUTPUT: Ye bhi sahi h
+
+INPUT: Bhai tu paise de rha hai !?
+OUTPUT: Deu kya ?
+
+INPUT: 😂😭😂😭😭
+OUTPUT: Bhai 500
+
+INPUT: Rakh apne pass bss
+OUTPUT: Thank u
+
+INPUT: Or thodi si clip bhar chalte hue bhi bana lena clg ki taki mummy ko bol skaun ki gaya tha. Clg ok
+OUTPUT: Me gaya hi ni clg aaj
+
+INPUT: Sirf 60 ya poore !?
+OUTPUT: 60 hi bhej de
+
+INPUT: Yeh sab toh
+OUTPUT: Bhai mera charger tere bag me hi reh gaya tha , kal le aana yaad se , jeena mushkil ho gaya
+
+INPUT: 220405
+OUTPUT: Akshay bhai war me attack kar , 1 ghanta h keval
+
+INPUT: Bhai kha hai tu
+OUTPUT: Pg <This message was edited>
+
+INPUT: Kyun what happen
+OUTPUT: Chal rehne de 13 ko jaauga
+
+INPUT: Bhai juban sai bol na yrrr
+OUTPUT: Acha h
+
+INPUT: CHEMISTRY MAI MAI PASS THA FIR BHI SHOW KYUN HO RHA HAI yha ??
+OUTPUT: Karta h
+
+INPUT: Bol
+OUTPUT: Bhai 1 second hua h merko ghar aae huae, nanosa nanisa se baat karne ki jagah terse kar raha hu
+
+INPUT: Papa ko phone kara rook
+OUTPUT: Ha
+
+INPUT: Bhai ese bhejega tog papa Ko 2000 ka hisaab kese dunga 😭😭
+OUTPUT: Aise hi bhejna padta h
+
+INPUT: 😭
+OUTPUT: Bhen ke ... , bhagwaan ne haat pair ni diae kya
+
+INPUT: 😭😭
+OUTPUT: Sab hota h karne ko to
+
+INPUT: Bhai tu bhooka hai na abhi isliye gussa aa rha tujhe kal nanosa k haath ka meat khana or chill ho jana 🥰
+OUTPUT: Aaj hi khauga , kal kya hota h , kal kisne dekha h
+
+INPUT: Bhai mera bhai hoga na tog iss diwali sai phle muje bula Lena ek baar
+OUTPUT: Bhula dunga , dimaag se ya takdeer se ya jindagi se ?
+
+INPUT: Chal photo toh bhejna kesa ky hai meat 🍖 🥰🥰
+OUTPUT: Nanisa se kaam nahi hoga itne jano ka
+
+INPUT: Areee yeh toh yahi hai
+OUTPUT: Yahi kahi ?
+
+INPUT: Mere yeh aa rha hai
+OUTPUT: Konsi mail se kara ?
+
+INPUT: Diwali ka ram ram bhai
+OUTPUT: TOMMOROW  Details will be shared and the campaign will start.  So if any of your friends from your college or different are yet to join the group. Share the group invite link with them and make  them join by today.  Link - https://chat.whatsapp.com/EEl79Oj7JrkIlRM7twAh0U?mode=ems_copy_t   Regards, Team Internsveda
+
+INPUT: Phdo ab
+OUTPUT: Got a small Christmas gift for you. Tap the link, help me decorate this Xmas tree, and you can win free cash on Swiggy.  Decorate Xmas tree with me: https://r.swiggy.com/decorate-xmas-tree/ydeHi7-hYhN1HsUwim
+
+INPUT: Bhai free ho tab call karna
+OUTPUT: Normal message check kar
+
+INPUT: 11700
+OUTPUT: 12%
+
+INPUT: Refershment bhi nhi milega
+OUTPUT: Bharat Coking Coal IPO GMP Today, Latest Grey Market Premium. https://share.google/Tqy6BEKqN5UX7TZ5V
+
+INPUT: Iss baar alag nhi lunga
+OUTPUT: Sooch rahe h
+
+INPUT: Flat - 71  Cg - 76
+OUTPUT: Topper hkm , kaam karao , kai baata me alag melya ho
+
+INPUT: A challan RJ[PHONE] has been issued against your vehicle number RJ19PS3903 on [PHONE]. To pay please visit https://echallan.parivahan.gov.in/index/accused-challan or contact the concerned challaning authority JAIPUR TRAFFIC for any further action. MoRTH
+OUTPUT: Dear All, Check out back result using below link :  https://jecrcresult.devboxtechnology.in/  Thanks
+
+INPUT: Ipo nikla ky
+OUTPUT: Rukja pending h
+
+INPUT: Fees ka bhej na
+OUTPUT: Dear Students and Parents,  JECRC University is offering a Special Scholarship on 7th Installment fees for Batch 2023.  Pay your 1st Installment fee for the Academic Session 2026-27 by 16th Jan. 2026 and avail 12% special scholarship.  As per fee notice, due date for 1st Installment (7th Semester) of Academic Session 2026-27 is 15th April 2026.  Fee Payment Link:  https://m.9m.io/JECRCU/knya6kn  Bank Account details:  A/c Name: JECRC UNIVERSITY COLLECTION ACCOUNT A/c No.: [PHONE] (Current Account) Bank: Axis Bank Limited, Sitapura, Jaipur IFSC: UTIB0002982 After payment of fee, send the details to email: [EMAIL] For query: [PHONE] JECRC University Accounts
+
+INPUT: Yahi dali thi lekin acadmic ki jagh 97500 bhara tha bss
+OUTPUT: Koi baat nhi
+
+INPUT: Fortuner niklwa li ky bhai
+OUTPUT: Nahi
+
+INPUT: ??
+OUTPUT: Kya no. aaya
+
+INPUT: Kisme
+OUTPUT: Marathon
+
+INPUT: Bhr ghumne chale ky abhi
+OUTPUT: Zudio jaana h
+
+INPUT: Ol <This message was edited>
+OUTPUT: Undergarments lene h
+
+INPUT: Lekin mere waale online hai out of stock hai
+OUTPUT: ?
+
+INPUT: ?
+OUTPUT: Abhi time lagega merko
+
+INPUT: Or kitna 😭
+OUTPUT: NPTEL kar raha h na ?
+

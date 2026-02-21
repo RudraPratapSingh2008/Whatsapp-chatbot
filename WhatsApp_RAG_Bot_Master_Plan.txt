@@ -1,0 +1,148 @@
+﻿🤖
+WhatsApp RAG Chatbot
+Production-Ready Master Plan
+A-to-Z Guide: Vector DB · RAG · Groq · Android Auto-Reply
+⚡  What makes this unique: Personalized AI that replies to your WhatsApp messages sounding exactly like YOU - using your real chat history as a vector database, per-contact memory, and a custom Android app that intercepts & auto-sends replies - fully automated, zero interaction needed.
+1. System Overview
+This system has three major components that work together seamlessly:
+
+📱Android AppA custom app (built in Android Studio) listens to WhatsApp notifications, extracts the sender and message, and POSTs them to your server. It then takes the AI reply and sends it back via the notification's RemoteInput - just like Watomatic, but AI-powered.🧠RAG ServerA Python FastAPI server that receives messages, queries ChromaDB for style-matching examples from your real chat history, retrieves conversation context from SQLite, builds a rich prompt, and calls Groq to generate a reply that sounds exactly like you.📚Vector DatabaseChromaDB stores embeddings of your WhatsApp replies. Each contact gets their OWN collection - so the AI knows your relationship style with each person separately. A global fallback collection handles new contacts.
+
+2. Full Architecture
+2.1 Data Flow (Message Lifecycle)
+Here is exactly what happens from the moment someone sends you a WhatsApp message to when they receive your AI reply:
+
+1Notification ReceivedWhatsApp delivers a notification to your Android phone. Your custom app's NotificationListenerService intercepts it before you even see it.2Extract MetadataThe app extracts: sender name, contact ID (phone number), and the full message text from the notification bundle.3POST to ServerThe app sends a JSON POST request to your server: { contact_id, contact_name, message }4RAG LookupServer queries ChromaDB collection for this contact, finding the top 8 most semantically similar examples of how you've replied to similar messages before.5History LookupServer queries SQLite for the last 10 messages in this conversation, giving the LLM full context of the ongoing chat.6Prompt AssemblyServer builds the final prompt: System Prompt + Style Examples (RAG) + Conversation History + New Message.7Groq InferenceGroq runs llama3-70b with temperature 0.75 and generates a reply in under 500ms.8Reply ReturnedServer returns { reply } as JSON to the Android app.9Auto-SendThe Android app uses RemoteInput (the same system WhatsApp Quick Reply uses) to inject the text and fire the reply - automatically, silently, instantly.
+2.2 Technology Stack
+
+LayerComponentTechnologyPurposeAndroidNotification InterceptorJava/KotlinNotificationListenerService reads WhatsApp notificationsAndroidAuto-Reply SenderRemoteInput APISends reply through WhatsApp's own reply mechanismAndroidSettings UIAndroid SDKEnable/disable toggle + server URL configurationServerAPI FrameworkFastAPI + UvicornAsync REST API, high performance, auto-docs at /docsServerLLM InferenceGroq (llama3-70b)Ultra-fast inference, ~500ms per replyServerVector StoreChromaDBPer-contact vector collections with semantic searchServerEmbeddingssentence-transformersall-MiniLM-L6-v2, local, free, fastServerConversation DBSQLiteLightweight, zero-config conversation history storeDevOpsContainerizationDocker + ComposeOne-command deployment, data persistenceScriptsData IngestionPythonConvert WhatsApp exports → JSON → ChromaDB
+
+3. Project File Structure
+
+whatsapp-rag-bot/ ├── server/ │   ├── main.py              ← FastAPI RAG server (MAIN FILE) │   ├── requirements.txt     ← Python dependencies │   ├── Dockerfile           ← Container image definition │   └── docker-compose.yml   ← One-command deploy ├── scripts/ │   ├── convert_export.py    ← WhatsApp .txt export → JSON │   └── ingest.py           ← JSON → ChromaDB vector DB ├── android-app/            ← Copy these into Android Studio project │   ├── WhatsAppListenerService.java  ← Core notification interceptor │   ├── MainActivity.java    ← Settings UI │   ├── AndroidManifest.xml  ← App permissions & registration │   └── activity_main.xml   ← Settings screen layout └── chroma_db/              ← Auto-created: vector DB storage
+
+4. Step-by-Step Setup Guide
+Step 1: Prepare Your Chat Data
+Export your WhatsApp chats and convert them to the ingestion format.
+1a. Export from WhatsApp
+• Open WhatsApp → Go to any chat → Tap ⋮ (three dots) → More → Export Chat
+• Choose 'Without Media' (we only need text)
+• Save the .txt file to your computer
+1b. Convert the export
+python scripts/convert_export.py chat_with_priya.txt \
+    --your-name "You" --output priya.json
+1c. Ingest into ChromaDB
+Run this for each contact's chat file:
+# Single contact (per-contact vector DB)
+python scripts/ingest.py --chat priya.json --contact "+919876543210"
+
+# All contacts at once + global fallback
+python scripts/ingest.py --all-chats ./chats/ --global-style
+
+# Verify ingestion
+python scripts/ingest.py --stats
+
+Step 2: Set Up the Server
+2a. Get your Groq API Key
+• Visit console.groq.com → Sign up → Create API Key → Copy it
+2b. Set the environment variable
+export GROQ_API_KEY="gsk_your_key_here"
+2c. Install and run (local testing)
+cd server
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+2d. Test the server
+curl -X POST http://localhost:8000/reply \
+  -H 'Content-Type: application/json' \
+  -d '{"contact_id":"+919876543210","contact_name":"Priya","message":"hey whats up?"}'
+You should get back a JSON with a reply that sounds like you.
+2e. Deploy with Docker (production)
+cd server
+echo "GROQ_API_KEY=gsk_your_key_here" > .env
+docker-compose up -d
+
+Step 3: Build the Android App
+3a. Set up Android Studio
+• Download Android Studio from developer.android.com
+• Create a new project: Empty Activity, Java, minSdk 26 (Android 8.0)
+• Package name: com.yourname.whatsappautobot
+3b. Add the provided files
+• Copy WhatsAppListenerService.java → app/src/main/java/com/yourname/whatsappautobot/
+• Copy MainActivity.java → same folder
+• Replace res/layout/activity_main.xml with the provided layout
+• Replace AndroidManifest.xml with the provided manifest
+3c. Update server URL
+In WhatsAppListenerService.java, line 38, change:
+private static final String SERVER_URL = "http://YOUR_SERVER_IP:8000/reply";
+To your actual server IP or domain. If running locally for testing, use your PC's IP on the same WiFi network (e.g., http://192.168.1.5:8000/reply).
+3d. Build the APK
+• In Android Studio: Build → Generate Signed Bundle / APK → APK
+• Or for debug testing: Run → Run 'app' (deploy to your phone directly)
+• Or: Build → Build APK(s) → Find in app/build/outputs/apk/debug/
+3e. Install and configure
+• Install APK on your Android phone
+• Open the app → Tap 'Grant Notification Access' → Enable 'WA RAG Bot Listener'
+• Enter your server URL → Toggle 'Enable Bot' ON → Save
+
+
+5. How the RAG System Works
+RAG (Retrieval-Augmented Generation) is the core of why this bot sounds like you - not a generic AI.
+
+Without RAG: AI generates a generic, robotic reply. With RAG: AI sees how YOU replied to similar messages before, and mimics that exact style.
+5.1 Ingestion Phase (One-time setup)
+1Parse Chat HistoryYour real WhatsApp conversations are parsed into (other_person_said → you_replied) pairs.2Generate EmbeddingsEach of your replies is converted into a 384-dimensional vector using sentence-transformers (all-MiniLM-L6-v2), running locally on your server.3Store in ChromaDBVectors + metadata (the triggering message) are stored in a per-contact ChromaDB collection on disk. Each contact = their own separate collection.
+5.2 Query Phase (Every message)
+1Embed Incoming MessageThe new message (e.g., 'wanna hang tmrw?') is embedded into the same 384-dim vector space.2Semantic SearchChromaDB finds the top 8 most semantically similar messages from your history - not exact keyword matches, but meaning-based matches.3Retrieve Style ExamplesThe search returns your actual replies to similar messages: e.g., 'hnn bhai let's meet around 5?'4Inject into PromptThese examples are injected into the LLM prompt as few-shot demonstrations of your texting style.5Generate ReplyGroq generates a reply that combines: your style examples + conversation history + the incoming message context.
+5.3 Per-Contact Isolation
+Each contact has their own ChromaDB collection. This is critical because:
+• You text your mom very differently from how you text your best friend
+• The AI learns the relationship-specific style, not just a generic average
+• New contacts fall back to the global_style collection until they have enough history
+
+
+6. The System Prompt (Customize This!)
+The system prompt is the instruction given to the LLM. It defines your persona. The default is tuned for Hinglish casual texting - customize it to match YOUR style:
+
+You are acting as the phone's owner. Reply to WhatsApp messages EXACTLY as they would - same tone, vocabulary, slang, length, and energy.  CRITICAL RULES: 1. You speak in Hinglish (Hindi + English mix) - casual, warm, sometimes sarcastic 2. Use short replies unless the question needs detail 3. Common words: arre, hnn, bhai, yaar, toh, kya, hm, ok, ni, meko, terko 4. Use ? for engagement, ! for emphasis 5. NEVER sound like a bot - sound human, natural, sometimes lazy 6. Match the energy of the incoming message 7. Reply ONLY with the message text - nothing extra
+To customize: Open server/main.py, find the SYSTEM_PROMPT constant, and adjust language, slang words, personality traits to match your exact style.
+
+
+7. Server Deployment Options
+Option A: Cloud VPS (Recommended - ₹500-1000/month)
+Best for: Always-on, works even when your PC is off. Works with mobile data (not just WiFi).
+1Get a VPSDigitalOcean Droplet ($6/mo), Hetzner CX11 (€4/mo), or AWS t3.micro (free tier). Ubuntu 22.04 LTS.2Install Dockersudo apt update && sudo apt install docker.io docker-compose -y3Clone & ConfigureUpload your code + .env file with GROQ_API_KEY4Rundocker-compose up -d  (runs forever, restarts on crash)5Get Public IPUse the VPS's public IP in your Android app's server URL setting
+Option B: Local PC with ngrok (Free, for testing)
+Best for: Development and testing. Requires PC to be on.
+# Run the server
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# In another terminal, expose to internet
+ngrok http 8000
+
+# Use the ngrok URL (e.g., https://abc123.ngrok.io/reply) in the Android app
+
+
+8. Server API Reference
+
+LayerComponentTechnologyPurposePOST/reply{ contact_id, contact_name, message }Main endpoint - returns AI replyGET/health-Health check for uptime monitoringGET/contacts-List all contacts + message countsGET/stats-Vector DB stats (examples per contact)DELETE/history/{id}-Clear conversation history for a contact
+
+9. Troubleshooting
+
+❌  Bot not replying at all → Check Notification Access is granted in phone Settings → Check the Enable Bot toggle is ON and saved → Check server is running: curl http://YOUR_IP:8000/health
+❌  Replies sound generic / not like me → Ingest more chat data (more examples = better style matching) → Customize the SYSTEM_PROMPT in main.py → Check --stats to ensure your contact's collection has examples
+❌  Android app crashes / won't install → Ensure minSdk is 26 (Android 8.0) or higher → Enable 'Install from unknown sources' in phone settings → Check logcat in Android Studio for errors
+❌  Server returns 500 error → Check GROQ_API_KEY is set correctly → Run python scripts/ingest.py --stats to check ChromaDB → Check server logs: docker-compose logs -f
+
+10. Security & Privacy Notes
+• Your chat history never leaves your server - ChromaDB is local
+• Only the incoming message and server URL leave your phone (over HTTPS in production)
+• Use HTTPS: Set usesCleartextTraffic=false in AndroidManifest.xml when using a domain with SSL
+• Your Groq API key only needs to be set on the server - never put it in the Android app
+• The Android app only intercepts WhatsApp notifications - no other apps or data
+• Add API key authentication to the /reply endpoint before deploying publicly
+
+
+11. Quick Start Checklist
+
+☐  Export WhatsApp chats (.txt files) for contacts you want the bot to handle ☐  Run: python scripts/convert_export.py for each chat ☐  Run: python scripts/ingest.py --all-chats ./chats/ --global-style ☐  Run: python scripts/ingest.py --stats  (verify data is there) ☐  Get Groq API key from console.groq.com ☐  Start server: uvicorn main:app --port 8000 ☐  Test: curl POST /reply with a sample message ☐  Open project in Android Studio ☐  Update SERVER_URL in WhatsAppListenerService.java ☐  Build APK → Install on phone ☐  Grant Notification Access in phone Settings ☐  Enable bot in app → Save settings ☐  Ask someone to send you a WhatsApp message and watch the magic happen ✨
+WhatsApp RAG Bot - Production Master Plan | Built with FastAPI + ChromaDB + Groq + Android
