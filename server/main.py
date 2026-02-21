@@ -8,6 +8,7 @@ Conversation history stored in Supabase PostgreSQL (cloud).
 
 import os
 import re
+import asyncio
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from typing import Optional
@@ -65,6 +66,48 @@ chroma_client = None
 chroma_collection = None
 groq_client: Groq = None
 db_pool: Optional[asyncpg.Pool] = None
+server_ready = False  # True once all heavy init is done
+
+
+# ──────────────────────────────────────────────
+# Background initialization (runs AFTER port is open)
+# ──────────────────────────────────────────────
+async def _heavy_init():
+    """Load model, connect DB, ingest data — runs as a background task
+    so the HTTP port opens immediately and Render's port scanner succeeds."""
+    global embedding_model, chroma_client, chroma_collection, groq_client, db_pool, server_ready
+
+    # 1. Connect to Supabase PostgreSQL
+    print("Connecting to Supabase PostgreSQL...")
+    try:
+        db_pool = await asyncpg.create_pool(
+            DATABASE_URL,
+            min_size=1,
+            max_size=5,
+            timeout=120,
+            command_timeout=120,
+            server_settings={'jit': 'off'},
+        )
+        print("Connected to Supabase PostgreSQL!")
+    except Exception as e:
+        print(f"WARNING: Failed to connect to Supabase: {e}")
+        print("Server will continue without database persistence (conversation history disabled)")
+        db_pool = None
+
+    # 2. Load embedding model (biggest delay)
+    print("Loading embedding model (all-MiniLM-L6-v2)...")
+    embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+    # 3. ChromaDB
+    print(f"Connecting to ChromaDB at {CHROMA_DIR}...")
+    chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
+    auto_ingest_if_needed()
+
+    # 4. Groq client
+    groq_client = Groq(api_key=GROQ_API_KEY)
+
+    server_ready = True
+    print(f"Server fully ready! Model: {GROQ_MODEL}")
 
 
 # ──────────────────────────────────────────────
@@ -226,46 +269,25 @@ def auto_ingest_if_needed():
 # ──────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global embedding_model, chroma_client, chroma_collection, groq_client, db_pool
+    global groq_client
 
     print("Starting WhatsApp RAG Bot Server...")
 
     if not GROQ_API_KEY:
         raise RuntimeError("GROQ_API_KEY environment variable not set!")
-    if not DATABASE_URL:
-        raise RuntimeError("DATABASE_URL environment variable not set!")
 
-    # Connect to Supabase PostgreSQL
-    print("Connecting to Supabase PostgreSQL...")
-    try:
-        db_pool = await asyncpg.create_pool(
-            DATABASE_URL,
-            min_size=1,
-            max_size=5,
-            timeout=120,  # 2 minute connection timeout
-            command_timeout=120,  # 2 minute query timeout
-            server_settings={'jit': 'off'}  # Supabase pooler compatibility
-        )
-        print("Connected to Supabase PostgreSQL!")
-    except Exception as e:
-        print(f"WARNING: Failed to connect to Supabase: {e}")
-        print("Server will continue without database persistence (conversation history disabled)")
-        db_pool = None
-
-    print("Loading embedding model (all-MiniLM-L6-v2)...")
-    embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-
-    print(f"Connecting to ChromaDB at {CHROMA_DIR}...")
-    chroma_client = chromadb.PersistentClient(path=CHROMA_DIR)
-
-    auto_ingest_if_needed()
-
+    # Only validate env vars here — heavy work runs in background
+    # so the port opens immediately for Render's health check.
     groq_client = Groq(api_key=GROQ_API_KEY)
 
-    print(f"Server ready! Model: {GROQ_MODEL}")
+    # Launch heavy init as a background task
+    init_task = asyncio.create_task(_heavy_init())
+    print("Server port is open — heavy initialization running in background...")
+
     yield
 
     # Cleanup
+    init_task.cancel()
     if db_pool:
         await db_pool.close()
         print("PostgreSQL connection pool closed.")
@@ -309,6 +331,12 @@ class ReplyResponse(BaseModel):
 @app.post("/reply", response_model=ReplyResponse)
 async def reply(request: MessageRequest):
     """Receive a WhatsApp message, return an AI-generated reply in your style."""
+    if not server_ready:
+        return ReplyResponse(
+            reply="hold on bhai, server abhi start ho rha h",
+            style_examples_used=0,
+            history_length=0,
+        )
     try:
         style_examples = query_style_examples(request.message)
         history = await get_history(request.contact_id)
@@ -331,6 +359,15 @@ async def reply(request: MessageRequest):
 
 @app.get("/health")
 async def health():
+    if not server_ready:
+        return {
+            "status": "initializing",
+            "database": "pending",
+            "model": GROQ_MODEL,
+            "collection_count": 0,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
     db_ok = False
     if db_pool is not None:
         try:
