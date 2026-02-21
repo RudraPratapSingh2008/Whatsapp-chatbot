@@ -71,20 +71,30 @@ db_pool: Optional[asyncpg.Pool] = None
 # PostgreSQL helpers (Supabase - conversation history)
 # ──────────────────────────────────────────────
 async def get_history(contact_id: str, limit: int = HISTORY_LENGTH) -> list:
-    async with db_pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT sender, message FROM messages WHERE contact_id = $1 ORDER BY timestamp DESC LIMIT $2",
-            contact_id, limit,
-        )
-    return [{"role": r["sender"], "content": r["message"]} for r in reversed(rows)]
+    if db_pool is None:
+        return []
+    try:
+        async with db_pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT sender, message FROM messages WHERE contact_id = $1 ORDER BY timestamp DESC LIMIT $2",
+                contact_id, limit,
+            )
+        return [{"role": r["sender"], "content": r["message"]} for r in reversed(rows)]
+    except Exception:
+        return []
 
 
 async def save_message(contact_id: str, contact_name: str, role: str, content: str):
-    async with db_pool.acquire() as conn:
-        await conn.execute(
-            "INSERT INTO messages (contact_id, contact_name, sender, message, timestamp) VALUES ($1, $2, $3, $4, $5)",
-            contact_id, contact_name, role, content, datetime.now(timezone.utc),
-        )
+    if db_pool is None:
+        return
+    try:
+        async with db_pool.acquire() as conn:
+            await conn.execute(
+                "INSERT INTO messages (contact_id, contact_name, sender, message, timestamp) VALUES ($1, $2, $3, $4, $5)",
+                contact_id, contact_name, role, content, datetime.now(timezone.utc),
+            )
+    except Exception:
+        pass
 
 
 # ──────────────────────────────────────────────
@@ -227,8 +237,20 @@ async def lifespan(app: FastAPI):
 
     # Connect to Supabase PostgreSQL
     print("Connecting to Supabase PostgreSQL...")
-    db_pool = await asyncpg.create_pool(DATABASE_URL, min_size=2, max_size=10, command_timeout=60)
-    print("Connected to Supabase PostgreSQL!")
+    try:
+        db_pool = await asyncpg.create_pool(
+            DATABASE_URL,
+            min_size=1,
+            max_size=5,
+            timeout=120,  # 2 minute connection timeout
+            command_timeout=120,  # 2 minute query timeout
+            server_settings={'jit': 'off'}  # Supabase pooler compatibility
+        )
+        print("Connected to Supabase PostgreSQL!")
+    except Exception as e:
+        print(f"WARNING: Failed to connect to Supabase: {e}")
+        print("Server will continue without database persistence (conversation history disabled)")
+        db_pool = None
 
     print("Loading embedding model (all-MiniLM-L6-v2)...")
     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -310,12 +332,13 @@ async def reply(request: MessageRequest):
 @app.get("/health")
 async def health():
     db_ok = False
-    try:
-        async with db_pool.acquire() as conn:
-            await conn.fetchval("SELECT 1")
-        db_ok = True
-    except Exception:
-        pass
+    if db_pool is not None:
+        try:
+            async with db_pool.acquire() as conn:
+                await conn.fetchval("SELECT 1")
+            db_ok = True
+        except Exception:
+            pass
 
     return {
         "status": "ok" if db_ok else "degraded",
@@ -328,12 +351,20 @@ async def health():
 
 @app.get("/stats")
 async def stats():
-    async with db_pool.acquire() as conn:
-        total_messages = await conn.fetchval("SELECT COUNT(*) FROM messages")
-        total_contacts = await conn.fetchval("SELECT COUNT(DISTINCT contact_id) FROM messages")
-        contacts = await conn.fetch(
-            "SELECT contact_id, contact_name, COUNT(*) as cnt FROM messages GROUP BY contact_id, contact_name"
-        )
+    total_messages = 0
+    total_contacts = 0
+    contacts = []
+    
+    if db_pool is not None:
+        try:
+            async with db_pool.acquire() as conn:
+                total_messages = await conn.fetchval("SELECT COUNT(*) FROM messages")
+                total_contacts = await conn.fetchval("SELECT COUNT(DISTINCT contact_id) FROM messages")
+                contacts = await conn.fetch(
+                    "SELECT contact_id, contact_name, COUNT(*) as cnt FROM messages GROUP BY contact_id, contact_name"
+                )
+        except Exception:
+            pass
 
     return {
         "vector_db": {
@@ -341,8 +372,8 @@ async def stats():
             "document_count": chroma_collection.count() if chroma_collection else 0,
         },
         "conversations": {
-            "total_messages": total_messages,
-            "total_contacts": total_contacts,
+            "total_messages": total_messages or 0,
+            "total_contacts": total_contacts or 0,
             "contacts": [{"id": c["contact_id"], "name": c["contact_name"], "messages": c["cnt"]} for c in contacts],
         },
     }
@@ -350,25 +381,35 @@ async def stats():
 
 @app.get("/contacts")
 async def contacts():
-    async with db_pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT contact_id, contact_name, COUNT(*) as cnt, MAX(timestamp) as last_msg "
-            "FROM messages GROUP BY contact_id, contact_name ORDER BY last_msg DESC"
-        )
-    return [
-        {
-            "contact_id": r["contact_id"],
-            "contact_name": r["contact_name"],
-            "message_count": r["cnt"],
-            "last_message": r["last_msg"].isoformat() if r["last_msg"] else None,
-        }
-        for r in rows
-    ]
+    if db_pool is None:
+        return []
+    try:
+        async with db_pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT contact_id, contact_name, COUNT(*) as cnt, MAX(timestamp) as last_msg "
+                "FROM messages GROUP BY contact_id, contact_name ORDER BY last_msg DESC"
+            )
+        return [
+            {
+                "contact_id": r["contact_id"],
+                "contact_name": r["contact_name"],
+                "message_count": r["cnt"],
+                "last_message": r["last_msg"].isoformat() if r["last_msg"] else None,
+            }
+            for r in rows
+        ]
+    except Exception:
+        return []
 
 
 @app.delete("/history/{contact_id}")
 async def delete_history(contact_id: str):
-    async with db_pool.acquire() as conn:
-        result = await conn.execute("DELETE FROM messages WHERE contact_id = $1", contact_id)
-        deleted = int(result.split()[-1])
-    return {"deleted": deleted, "contact_id": contact_id}
+    if db_pool is None:
+        return {"deleted": 0, "contact_id": contact_id, "status": "database_unavailable"}
+    try:
+        async with db_pool.acquire() as conn:
+            result = await conn.execute("DELETE FROM messages WHERE contact_id = $1", contact_id)
+            deleted = int(result.split()[-1])
+        return {"deleted": deleted, "contact_id": contact_id}
+    except Exception:
+        return {"deleted": 0, "contact_id": contact_id, "status": "error"}
